@@ -16,7 +16,7 @@ create_django_project(){
 }
 
 install_py_deps(){
-    echo "Installing provided dependanciess";
+    echo "Installing provided dependencies";
     pipenv install django
     pipenv install $DEPS;
 }
