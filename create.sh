@@ -16,7 +16,7 @@ create_django_project(){
 }
 
 install_py_deps(){
-    echo "Installing provided deps";
+    echo "Installing provided dependanciess";
     pipenv install django
     pipenv install $DEPS;
 }
@@ -44,9 +44,9 @@ create_super_user(){
 }
 
 run_and_demo(){
-    echo "Starting server.."
+    echo "Starting server on port 8000.."
     nohup pipenv run python manage.py runserver >> django-app.log 2>&1 &
-    google-chrome localhost
+    xdg-open http://localhost:8000
 }
 
 
@@ -61,5 +61,5 @@ then
     create_super_user
     run_and_demo
 else
-    echo "Either project name or app name are not specified, please try again"
+    echo "Either project name or app name is not specified, please try again"
 fi
