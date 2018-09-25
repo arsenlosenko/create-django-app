@@ -1,5 +1,10 @@
 #!/bin/bash
 
+NORMAL="\e[0m"
+BOLD="\e[1m"
+GREEN="\e[32m"
+RED="\e[31m"
+
 while getopts p:a:d: option
 do
     case "${option}"
@@ -12,11 +17,11 @@ done
 
 create_django_project(){
     django-admin startproject $PROJECT_NAME;
-    echo "Project created in $(pwd)/$PROJECT_NAME";
+    echo -e "Project created in $BOLD$(pwd)/$PROJECT_NAME $NORMAL";
 }
 
 install_py_deps(){
-    echo "Installing provided dependencies";
+    echo -e "Installing provided dependencies";
     pipenv install django
     pipenv install $DEPS;
 }
@@ -25,7 +30,7 @@ create_django_app(){
     IFS=' ' read -ra APP_NAMES <<< $APP_NAME;
     for app in "${APP_NAMES[@]}"; do
         django-admin startapp $app
-        echo "Application created in $(pwd)/$app"
+        echo -e "Application created in $BOLD$(pwd)/$app $NORMAL"
     done
 }
 
@@ -34,19 +39,31 @@ git_init(){
 }
 
 initial_migration(){
-    echo "Initial migration started"
+    echo -e "$BOLD Initial migration started $NORMAL"
     pipenv run python manage.py migrate
 }
 
 create_super_user(){
-    echo "Creating superuser account"
+    echo -e "$BOLD Creating superuser account $NORMAL"
     pipenv run python manage.py createsuperuser
 }
 
 run_and_demo(){
     echo "Starting server on port 8000.."
-    nohup pipenv run python manage.py runserver >> django-app.log 2>&1 &
-    xdg-open http://localhost:8000
+    nohup pipenv run python manage.py runserver </dev/null > django-app.log 2>&1 &
+    xdg-open http://localhost:8000 >> /dev/null 2>&1
+}
+
+show_help(){
+    echo -e "
+    Usage: ./create.sh -p PROJECT_NAME -a APP_NAME(s) -d DEPENDENCIES
+    -p - name of the project
+    -a - name of app, or apps, in quotes
+    -d - dependencies, also in quotes
+
+    Example:
+    ./create.sh -d foo_project -a 'foo_app bar_app' -d 'requests'
+    "
 }
 
 
@@ -61,5 +78,6 @@ then
     create_super_user
     run_and_demo
 else
-    echo "Either project name or app name is not specified, please try again"
+    echo -e "$RED Either project name or app name is not specified, please try again $NORMAL"
+    show_help
 fi
