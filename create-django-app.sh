@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 
 NORMAL="\e[0m"
 BOLD="\e[1m"
@@ -70,13 +70,13 @@ run_and_demo(){
 
 show_help(){
     echo -e "
-    Usage: ./create.sh -p PROJECT_NAME -a APP_NAME(s) -d DEPENDENCIES
+    Usage: ./create-django-app.sh -p PROJECT_NAME -a APP_NAME(s) -d DEPENDENCIES
     -p - name of the project
     -a - name of app, or apps, in quotes
     -d - dependencies, also in quotes
 
     Example:
-    ./create.sh -d foo_project -a 'foo_app bar_app' -d 'requests'
+    ./create-django-app.sh -d foo_project -a 'foo_app bar_app' -d 'requests'
     "
 }
 
