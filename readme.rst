@@ -8,7 +8,9 @@ What this script does:
 
 - Creates Django project 
 - Creates corresponding apps
+- Creates initial virtualenv (venv)
 - Installs provided dependencies   
+- Creates initial requirements.txt
 - Initializes git repository
 - Runs initial migration (using sqlitedb)
 - Creates superuser

@@ -4,6 +4,7 @@ NORMAL="\e[0m"
 BOLD="\e[1m"
 GREEN="\e[32m"
 RED="\e[31m"
+VENV="venv"
 
 while getopts p:a:d: option
 do
@@ -20,39 +21,52 @@ create_django_project(){
     echo -e "Project created in $BOLD$(pwd)/$PROJECT_NAME $NORMAL";
 }
 
-install_py_deps(){
-    echo -e "Installing provided dependencies";
-    pipenv install django
-    pipenv install $DEPS;
-}
-
 create_django_app(){
     IFS=' ' read -ra APP_NAMES <<< $APP_NAME;
     for app in "${APP_NAMES[@]}"; do
         django-admin startapp $app
-        echo -e "Application created in $BOLD$(pwd)/$app $NORMAL"
+        echo -e "Application $BOLD$app$NORMAL created in $BOLD$(pwd)/$app $NORMAL"
     done
 }
+
+init_venv(){
+    echo -e "$BOLD""Initializing virtualenv$NORMAL"
+    python3 -m venv $VENV
+    source $VENV/bin/activate
+}
+
+install_py_deps(){
+    echo -e "Installing provided dependencies";
+    pip install django
+    pip install $DEPS;
+}
+
+create_requirements(){
+    pip freeze >> requirements.txt
+    echo -e "Requirements file created, stored in$BOLD $(pwd)/requirements.txt$NORMAL"
+}
+
 
 git_init(){
     git init
 }
 
 initial_migration(){
-    echo -e "$BOLD Initial migration started $NORMAL"
-    pipenv run python manage.py migrate
+    echo -e "$BOLD""Initial migration started $NORMAL"
+    python manage.py migrate
 }
 
 create_super_user(){
-    echo -e "$BOLD Creating superuser account $NORMAL"
-    pipenv run python manage.py createsuperuser
+    echo -e "$BOLD""Creating superuser account $NORMAL"
+    python manage.py createsuperuser
 }
 
 run_and_demo(){
     echo "Starting server on port 8000.."
-    nohup pipenv run python manage.py runserver </dev/null > django-app.log 2>&1 &
+    nohup python manage.py runserver </dev/null > django-app.log 2>&1 &
     xdg-open http://localhost:8000 >> /dev/null 2>&1
 }
+
 
 show_help(){
     echo -e "
@@ -72,7 +86,9 @@ then
     create_django_project
     cd $PROJECT_NAME
     create_django_app
+    init_venv
     install_py_deps
+    create_requirements
     git_init
     initial_migration
     create_super_user
