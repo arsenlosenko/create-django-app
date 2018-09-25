@@ -22,7 +22,7 @@ You can download it via wget/curl/whatever you prefer:
 
 .. code-block:: bash
 
-    curl https://raw.githubusercontent.com/arsenlosenko/create-django-app/master/create-django-app.sh
+    curl -O https://raw.githubusercontent.com/arsenlosenko/create-django-app/master/create-django-app.sh
 
 After that give it executable permission:
 
