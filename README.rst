@@ -18,6 +18,17 @@ What this script does:
 
 Download and run the script:
 ----------------------------
+Python version:
+---------------
+Download it from PyPi:
+
+.. code-block:: bash
+
+    pip3 install create-django-app
+
+
+Bash version:
+--------------
 You can download it via wget/curl/whatever you prefer:
 
 .. code-block:: bash

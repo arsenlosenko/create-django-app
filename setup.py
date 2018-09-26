@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '0.0.8'
+version = '0.0.8.1'
 
 setup(
     name='create-django-app',
@@ -11,7 +11,7 @@ setup(
     author='Arsen Losenko',
     author_email='arsenlosenko@gmail.com',
     description='CLI tool to automate initialization of Django project',
-    long_description=open('readme.rst').read(),
+    long_description=open('README.rst').read(),
     keywords='python django cli CLI',
     classifiers=[
             'Development Status :: 3 - Alpha',
