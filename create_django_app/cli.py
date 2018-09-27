@@ -3,7 +3,7 @@ import os
 import webbrowser
 from os.path import abspath
 from subprocess import run
-from venv import EnvBuilder
+from virtualenv import create_environment
 from argparse import ArgumentParser
 
 bold = lambda word: "\033[1;37;40m{}\033[0;37;40m".format(word)
@@ -19,8 +19,12 @@ def parse_args() -> None:
     parser.add_argument('--nodemo', help="don't run server in the end", action='store_true')
     return parser.parse_args()
 
-def run_django_admin(cmd: str, *args):
-    return run(['django-admin', cmd, *args])
+def make_project_dir(dir_name: str):
+    print(bold("Project creation begun..."))
+    os.mkdir(abspath(dir_name))
+
+def run_django_admin(project_dir: str, cmd: str, *args):
+    return run(['{}/venv/bin/django-admin'.format(project_dir), cmd, *args])
 
 def pip_install(venv_folder: str, package: str) -> None:
     return run(['{}/venv/bin/pip'.format(venv_folder), 'install', package]) 
@@ -31,17 +35,16 @@ def run_manage_py(cmd, *args):
 
 def create_django_project(project_name: str) -> None:
     print('Initializing Django project {}'.format(bold(project_name)))
-    run_django_admin('startproject', project_name)
+    run_django_admin(os.getcwd(), 'startproject', project_name, '.')
 
 def create_django_apps(apps: str) -> None:
     for app in apps.split(' '):
-        run_django_admin('startapp', app)
+        run_django_admin(os.getcwd(), 'startapp', app)
         print('Application {} created in {}'.format(bold(app), bold(os.path.abspath(app))))
 
 def init_venv() -> None:
     venv_dir = os.getcwd() + '/venv'
-    venv = EnvBuilder(with_pip=True)
-    venv.create(venv_dir)
+    create_environment(venv_dir)
     
 def install_deps(dependencies: str) -> None:
     print(bold('Installing dependencies'))
@@ -79,11 +82,12 @@ def print_msg(msg, cmd):
 
 def create_project() -> None:
     args = parse_args()
-    create_django_project(args.project)
+    make_project_dir(args.project)
     os.chdir(abspath(args.project))
-    create_django_apps(args.apps)
     init_venv()
     install_deps(args.deps)
+    create_django_project(args.project)
+    create_django_apps(args.apps)
     create_requirements()
     git_init()
     initial_migration()
