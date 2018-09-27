@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '0.0.9'
+version = '0.0.9.1'
 
 setup(
     name='create-django-app',
@@ -10,7 +10,7 @@ setup(
     license='MIT',
     author='Arsen Losenko',
     author_email='arsenlosenko@gmail.com',
-    description='CLI tool to automate initialization of Django project',
+    description='CLI tool to quickstart Django app',
     long_description=open('README.rst').read(),
     keywords='python django cli CLI',
     classifiers=[

@@ -16,7 +16,7 @@ def parse_args() -> None:
     parser.add_argument('-p', '--project', help='name of the project', required=True)
     parser.add_argument('-a', '--apps', help='name of apps', required=True)
     parser.add_argument('-d', '--deps', help='dependency names')
-    parser.add_argument('--noadmin', help='create project without superuser', action='store_true')
+    parser.add_argument('--noadmin', help='skip superuser creation', action='store_true')
     parser.add_argument('--nodemo', help="don't run server in the end", action='store_true')
     return parser.parse_args()
 
@@ -88,8 +88,7 @@ def run_and_demo():
     python = os.getcwd() + '/venv/bin/python'
     run(['nohup', python, 'manage.py', 'runserver'], stdout=open('/dev/null', 'w'),
                                         stderr=open('django.log', 'a'), preexec_fn=os.setpgrp)
-    run(['xdg-open', 'http://localhost:8000'], stdout=open('/dev/null', 'w'),
-                                        stderr=open('/dev/null', 'w'), preexec_fn=os.setpgrp)
+    webbrowser.open('http://localhost:8000', new=2)
 
 
 def print_msg(msg, cmd):
