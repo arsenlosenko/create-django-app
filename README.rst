@@ -1,7 +1,7 @@
 create-django-app
 =================
 
-Even though I rarely create new django apps from scratch, I still don't like initial procedure of creating it, too much steps that can be automated. So I created this script to make the process easier.
+Even though I rarely create new django apps from scratch, I still don't like initial procedure of creating it, too much steps that can be automated. That's the purpose of this tool.
 
 What this script does:
 -----------------------
@@ -24,7 +24,24 @@ Download it from PyPi:
 
 .. code-block:: bash
 
-    pip3 install create-django-app
+    pip3 install create-django-app --user
+
+Usage:
+
+.. code-block:: bash
+
+    # show help
+    create-django-app --help
+
+    # create django project
+    create-django-app -p test_project -a 'test_app1 test_app2' -d requests
+
+    # create project without admin user with --noadmin flag
+    create-django-app -p test_project -a 'test_app1 test_app2' -d requests --noadmin
+
+    # don't run server in the end with --nodemo flag
+    create-django-app -p test_project -a 'test_app1 test_app2' -d requests --nodemo
+
 
 
 Bash version:
@@ -46,3 +63,9 @@ And run it:
 .. code-block:: bash
 
     ./create-django-app.sh -d foo_project -a 'foo_app bar_app' -d 'requests'
+
+Show help:
+
+.. code-block:: bas
+
+    ./create-django-app.sh
