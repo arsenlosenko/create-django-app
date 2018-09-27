@@ -6,6 +6,10 @@ from subprocess import run
 from venv import EnvBuilder
 from argparse import ArgumentParser
 
+bold = lambda word: "\033[1;37;40m{}\033[0;37;40m".format(word)
+green = lambda word: "\033[1;31;40m{}\033[0;37;40m".format(word)
+red = lambda word: "\033[1;32;40m{}\033[0;37;40m".format(word)
+
 def parse_args() -> None:
     parser = ArgumentParser(description='Create Django App: CLI tool for automatic django app creation')
     parser.add_argument('-p', '--project', help='name of the project', required=True)
@@ -24,13 +28,13 @@ def run_manage_py(cmd, *args):
     run([python, 'manage.py', cmd, *args])
 
 def create_django_project(project_name: str) -> None:
-    print('Initializing Django project')
+    print('Initializing Django project {}'.format(bold(project_name)))
     run_django_admin('startproject', project_name)
 
 def create_django_apps(apps: str) -> None:
     for app in apps.split(' '):
         run_django_admin('startapp', app)
-        print('Application {} created in {}'.format(app, os.path.abspath(app)))
+        print('Application {} created in {}'.format(bold(app), bold(os.path.abspath(app))))
 
 def init_venv() -> None:
     venv_dir = os.getcwd() + '/venv'
@@ -38,34 +42,35 @@ def init_venv() -> None:
     venv.create(venv_dir)
     
 def install_deps(dependencies: str) -> None:
-    print('Installing dependencies')
+    print(bold('Installing dependencies'))
     project_dir = os.getcwd()
     pip_install(project_dir, 'django')
-    pip_install(project_dir, dependencies)
+    if dependencies is not None:
+        pip_install(project_dir, dependencies)
 
 def create_requirements():
     pip = os.getcwd() + '/venv/bin/pip'
     run([pip, 'freeze'], stdout=open('requirements.txt', 'w'))
-    print('Requirements file created, situated in {}'.format(os.getcwd() + '/requirements.txt'))
+    print('Requirements file created, situated in {}'.format(bold(os.getcwd() + '/requirements.txt')))
 
 def git_init():
     run(['git', 'init'])
 
 def initial_migration():
-    print('Running initial migration')
+    print(bold('Running initial migration'))
     run_manage_py('migrate')
 
 def create_super_user():
-    print('Creating superuser')
+    print(bold('Creating superuser'))
     run_manage_py('createsuperuser')
 
 def run_and_demo():
-    print('Starting server on port 8000...')
+    print(bold('Starting server on port 8000...'))
     python = os.getcwd() + '/venv/bin/python'
     run(['nohup', python, 'manage.py', 'runserver'], stdout=open('/dev/null', 'w'),
                                         stderr=open('django.log', 'a'), preexec_fn=os.setpgrp)
-    webbrowser.open('http://localhost:8000', new=2)
-
+    run(['xdg-open', 'http://localhost:8000'], stdout=open('/dev/null', 'w'),
+                                        stderr=open('/dev/null', 'w'), preexec_fn=os.setpgrp)
 
 def create_project() -> None:
     args = parse_args()
