@@ -17,7 +17,7 @@ do
 done
 
 create_django_project(){
-    django-admin startproject $PROJECT_NAME;
+    django-admin startproject $PROJECT_NAME .;
     echo -e "Project created in $BOLD$(pwd)/$PROJECT_NAME $NORMAL";
 }
 
@@ -81,10 +81,11 @@ show_help(){
 
 if [[ $PROJECT_NAME && $APP_NAME && $DEPS ]]
 then
+    mkdir $PROJECT_NAME
+    cd $PROJECT_NAME
     init_venv
     install_py_deps
     create_django_project
-    cd $PROJECT_NAME
     create_django_app
     create_requirements
     git_init

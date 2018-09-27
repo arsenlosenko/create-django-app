@@ -46,6 +46,7 @@ Usage:
 
 Bash version:
 --------------
+DEPRECATED: this script does not recieve same updates as the python package, buy still gets the job done.
 You can download it via wget/curl/whatever you prefer:
 
 .. code-block:: bash
