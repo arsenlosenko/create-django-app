@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '0.0.8.1'
+version = '0.0.8.3'
 
 setup(
     name='create-django-app',
