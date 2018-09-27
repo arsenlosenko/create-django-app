@@ -7,14 +7,16 @@ from venv import EnvBuilder
 from argparse import ArgumentParser
 
 bold = lambda word: "\033[1;37;40m{}\033[0;37;40m".format(word)
-green = lambda word: "\033[1;31;40m{}\033[0;37;40m".format(word)
-red = lambda word: "\033[1;32;40m{}\033[0;37;40m".format(word)
+green = lambda word: "\033[1;32;40m{}\033[0;37;40m".format(word)
+red = lambda word: "\033[1;31;40m{}\033[0;37;40m".format(word)
 
 def parse_args() -> None:
     parser = ArgumentParser(description='Create Django App: CLI tool for automatic django app creation')
     parser.add_argument('-p', '--project', help='name of the project', required=True)
     parser.add_argument('-a', '--apps', help='name of apps', required=True)
-    parser.add_argument('-d', '--deps', help='dependency names', required=True)
+    parser.add_argument('-d', '--deps', help='dependency names')
+    parser.add_argument('--noadmin', help='create project without superuser', action='store_true')
+    parser.add_argument('--nodemo', help="don't run server in the end", action='store_true')
     return parser.parse_args()
 
 def run_django_admin(cmd: str, *args):
@@ -72,6 +74,9 @@ def run_and_demo():
     run(['xdg-open', 'http://localhost:8000'], stdout=open('/dev/null', 'w'),
                                         stderr=open('/dev/null', 'w'), preexec_fn=os.setpgrp)
 
+def print_msg(msg, cmd):
+    print("{}\n\n  {}\n".format(bold(msg), green(cmd)))
+
 def create_project() -> None:
     args = parse_args()
     create_django_project(args.project)
@@ -82,8 +87,21 @@ def create_project() -> None:
     create_requirements()
     git_init()
     initial_migration()
-    create_super_user()
-    run_and_demo()
+    if args.noadmin:
+        print_msg(
+            "Project initialized wihtout superuser,"
+            "to create him run this command inside of project's virtualenv:",
+            "python manage.py createsuperuser")
+    else:
+        create_super_user()
+
+    if args.nodemo:
+        print_msg(
+            "You are all set, project is ready for hacking!\n"
+            "To start development server you can run this command:",
+            "python manage.py runserver")
+    else:
+        run_and_demo()
 
 if __name__ == '__main__':
     create_project()
