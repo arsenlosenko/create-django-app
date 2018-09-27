@@ -66,6 +66,6 @@ And run it:
 
 Show help:
 
-.. code-block:: bas
+.. code-block:: bash
 
     ./create-django-app.sh

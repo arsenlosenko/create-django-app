@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '0.0.8.3'
+version = '0.0.9'
 
 setup(
     name='create-django-app',
@@ -19,6 +19,9 @@ setup(
             'Topic :: Utilities',
             'License :: OSI Approved :: MIT License',
             'Programming Language :: Python :: 3.5'
+    ],
+    install_requires=[
+        'virtualenv'
     ],
     entry_points = {
         'console_scripts': ['create-django-app=create_django_app.cli:create_project']

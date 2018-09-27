@@ -36,7 +36,7 @@ init_venv(){
 }
 
 install_py_deps(){
-    echo -e "Installing provided dependencies";
+    echo -e "$BOLD""Installing provided dependencies""$NORMAL";
     pip install django
     pip install $DEPS;
 }
@@ -45,7 +45,6 @@ create_requirements(){
     pip freeze >> requirements.txt
     echo -e "Requirements file created, stored in$BOLD $(pwd)/requirements.txt$NORMAL"
 }
-
 
 git_init(){
     git init
@@ -67,7 +66,6 @@ run_and_demo(){
     xdg-open http://localhost:8000 >> /dev/null 2>&1
 }
 
-
 show_help(){
     echo -e "
     Usage: ./create-django-app.sh -p PROJECT_NAME -a APP_NAME(s) -d DEPENDENCIES
@@ -83,11 +81,11 @@ show_help(){
 
 if [[ $PROJECT_NAME && $APP_NAME && $DEPS ]]
 then
+    init_venv
+    install_py_deps
     create_django_project
     cd $PROJECT_NAME
     create_django_app
-    init_venv
-    install_py_deps
     create_requirements
     git_init
     initial_migration
